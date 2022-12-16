@@ -1,0 +1,19 @@
+{
+  "name": "softwaretesting_robotproject",
+  "version": "1.0.0",
+  "description": "Unit Testing using robot framework.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MAFRUHA-LEAVIN/Softwaretesting_robotproject.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MAFRUHA-LEAVIN/Softwaretesting_robotproject/issues"
+  },
+  "homepage": "https://github.com/MAFRUHA-LEAVIN/Softwaretesting_robotproject#readme"
+}
