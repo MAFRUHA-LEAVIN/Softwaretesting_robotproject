@@ -1,27 +1,26 @@
-on: ["push", "pull_request"]
+on: ["push", "pull_request"] 
+    workflow_dispatcj
 
 name: Test Coveralls Parallel
 
 jobs:
-  test:
+  build:
+
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        test_number:
-          - 1
           
     steps:
-    - uses: actions/checkout@master
+    - name: Checkout
+      uses: actions/checkout@master
     - name: Use Node.js 14.x
       uses: actions/setup-node@master
       with:
-        version: 10.x
+        version: 14.x
 
     - name: npm install
       run: npm install
 
     - name: Test ${{ matrix.test_number }}
-      run: make test-coverage-${{ matrix.test_number }}
+      run: js-${{ matrix.test_number }}
     - name: Coveralls Parallel
       uses: coverallsapp/github-action@master
       with:
