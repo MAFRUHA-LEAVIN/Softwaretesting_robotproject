@@ -4,7 +4,7 @@
   "description": "Unit Testing using robot framework.",
   "main": "index.js",
   "scripts": {
-    "test": "npm run test"
+    "test": "jest --coveralls"
   
     
   },
