@@ -1,43 +1,45 @@
-# More examples of Codefresh YAML can be found at
-# https://codefresh.io/docs/docs/yaml-examples/examples/
+name: Tests
+on: [push, pull_request]
+env:
+  CI: true
 
-version: "1.0"
-# Stages can help you organize your steps in stages
-stages:
-  - "clone"
-  - "build"
-  - "test"
-
-steps:
-  clone:
-    title: "Cloning repository"
-    type: "git-clone"
-    repo: "Softwaretesting_robotproject"
-    # CF_BRANCH value is auto set when pipeline is triggered
-    # Learn more at codefresh.io/docs/docs/codefresh-yaml/variables/
-    revision: "${{CF_BRANCH}}"
-    git: "github"
-    stage: "clone"
-
-  build:
-    title: "Building Docker image"
-    type: "build"
-    image_name: "anaisurlichs/coveralls-sample-app"
-    working_directory: "${{clone}}"
-    tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
-    dockerfile: "Dockerfile"
-    stage: "build"
-    registry: "dockerhub"
-    
+jobs:
   test:
-    title: "Running test"
-    type: "freestyle" # Run any command
-    image: "node:15.2" # The image in which command will be executed
-    working_directory: "${{clone}}" # Running command where code cloned
-    commands:
-      - "export COVERALLS_SERVICE_NAME=${{COVERALLS_SERVICE_NAME}}"
-      - "export COVERALLS_GIT_BRANCH=${{CF_BRANCH}}"
-      - "export COVERALLS_REPO_TOKEN=${{COVERALLS_REPO_TOKEN}}"
-      - "npm install --save-dev jest"
-      - "npm run test"
-    stage: "test"
+    name: Node ${{ matrix.node }} on ${{ matrix.os }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        test_number:
+          - 1
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+
+      - name: Set Node.js version
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10.x
+
+      - name: Install npm dependencies
+        run: npm install # switch to `npm ci` when Node.js 6 support is dropped
+
+      - name: Run tests
+        run: npm run test
+
+      - name: Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: MgHy694j47dEguq5evFM7GNbJ90sm3xgq0yGf
+          flag-name: ${{matrix.os}}-node-${{ matrix.node }}
+          parallel: true
+
+  finish:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Coveralls Finished
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: MgHy694j47dEguq5evFM7GNbJ90sm3xgq0yGf
+          parallel-finished: true
