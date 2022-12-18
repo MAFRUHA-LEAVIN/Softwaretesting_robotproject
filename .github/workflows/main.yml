@@ -20,7 +20,7 @@ jobs:
       run: npm install
 
     - name: Test ${{ matrix.test_number }}
-      run: js-${{ matrix.test_number }}
+      run: make test-coverage-${{ matrix.test_number }}
     - name: Coveralls Parallel
       uses: coverallsapp/github-action@master
       with:
