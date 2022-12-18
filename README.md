@@ -1,2 +1,2 @@
-# Softwaretesting_robotproject
-Unit Testing using robot framework. 
+# Softwaretesting_project
+Unit Testing using jest. 
