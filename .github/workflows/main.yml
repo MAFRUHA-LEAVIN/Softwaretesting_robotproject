@@ -1,26 +1,41 @@
-on: ["push", "pull_request"] 
-    
 
-name: Test 
+
+
+
+
+
+
+
+        on: ["push", "pull_request"]
+
+name: Test Coveralls Parallel
 
 jobs:
-  build:
-
-    runs-on: [ 'ubuntu-latest', 'windows-latest' ]
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        test_number:
+          - 1
           
     steps:
-    - name: Checkout
-      uses: actions/checkout@master
+    - uses: actions/checkout@master
     - name: Use Node.js 14.x
       uses: actions/setup-node@master
       with:
-        version: 14.x
+        version: 10.x
 
     - name: npm install
       run: npm install
 
-    - name: Run Test Suite
-      run: softwaretesting_ronotproject/js
+    - name: Test ${{ matrix.test_number }}
+      run: make test-coverage-${{ matrix.test_number }}
+    - name: Coveralls Parallel
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.github_token }}
+        flag-name: run-${{ matrix.test_number }}
+        parallel: true
 
   finish:
     needs: test

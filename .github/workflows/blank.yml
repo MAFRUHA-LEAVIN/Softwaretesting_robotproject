@@ -1,0 +1,33 @@
+on: ["push", "pull_request"] 
+    
+
+name: Test 
+
+jobs:
+  build:
+
+    runs-on: [ 'ubuntu-latest', 'windows-latest' ]
+          
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+    - name: Use Node.js 14.x
+      uses: actions/setup-node@master
+      with:
+        version: 14.x
+
+    - name: npm install
+      run: npm install
+
+    - name: Run Test Suite
+      run: softwaretesting_ronotproject/js
+
+  finish:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Coveralls Finished
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.github_token }}
+        parallel-finished: true
