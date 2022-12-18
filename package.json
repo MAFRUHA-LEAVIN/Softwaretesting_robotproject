@@ -4,8 +4,7 @@
   "description": "Unit Testing using robot framework.",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
-    
+    "test": "jest --coverage && coveralls < coverage/lcov.info"
   },
   "repository": {
     "type": "git",
